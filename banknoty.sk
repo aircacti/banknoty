@@ -1,0 +1,35 @@
+command /banknot [<integer>]:
+	usage: &7Wpisz /banknot [tutaj kwota w postaci liczby całkowitej]
+	trigger:
+		if arg 1 is not set:
+			send "&7Podaj kwote która chcesz zmienić na banknot. /banknot kwota"
+		if arg 1 is set:
+			if arg 1 is greater than 0:
+				if arg 1 is number:
+					if arg 1 is less than 1000000:
+						if balance of player is greater or equal to arg 1:
+							if player's tool is air:
+								remove arg 1 from player's balance
+								give 1 of paper named "&aBanknot $%arg 1%" with lore "&7PPM aby zmienić na $" and "" and "%arg 1%" and "&cEmitowany przez bank" and "&cserwera" to player
+								send "&aZamieniono pieniądze wirtualne w banknot $%arg 1%!"
+							else:
+								send "&cNie możesz nic trzymać w ręce!"
+						else:
+							send "&cNie masz tyle pieniedzy na koncie!" 
+					else:
+						send "&cMaksymalna kwota banknotu to $999999"
+				else:
+					send "To nie liczba"
+			else:
+				send "&cLiczba musi byc wieksza niz 0"
+
+on rightclick holding paper:
+	if 5th line of lore of player's tool is "&cserwera":
+		if name of player's tool is "&aBanknot $%3th line of lore of player's tool%":
+			if item amount of player's tool is 1:
+				add 3th line of lore of player's tool parsed as number to player's balance
+				send "&aWykonano transfer waluty z banknotu na twoje konto! Twój stan konta %balance of player%"
+				set player's tool to air
+			else:
+				send "&cTrzymaj tylko 1 banknot"
+
